@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="0.1"
+    android:weightSum="1"
+    android:orientation="vertical"
+    android:id="@+id/StatusViewChild">
+
+    <Button
+        android:id="@+id/breakdown_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:background="#d67601"
+        android:text="@string/breakdown"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/stage_3_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/receiving_received"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:background="#d67601"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"/>
+
+    <Button
+        android:id="@+id/stage_3_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/free"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:background="#d67601"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp" />
+
+</LinearLayout>

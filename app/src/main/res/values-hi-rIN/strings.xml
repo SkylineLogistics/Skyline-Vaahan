@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Skyline Vaahan</string>
+    <string name="loading_advice">"लोडिंग पर्ची "</string>
+    <string name="factory_entry">"फ़ैक्टरी के अंदर "</string>
+    <string name="loaded">लोड</string>
+    <string name="paper_received">"पेपर मिल गए "</string>
+    <string name="trip_start">"चलना शुरू कर दिया "</string>
+    <string name="diesel_and_road_expense">"डीज़ल और रास्ता ख़र्चा "</string>
+    <string name="destination_reached">"जगह पर पहोच गए "</string>
+    <string name="unloading_point_entry">खली करने के लिए अंदर होगए</string>
+    <string name="sample">सैम्पल के लिए गया</string>
+    <string name="sample_pass">"सैम्पल पास हुआ "</string>
+    <string name="sample_fail">"सैम्पल फैल हुआ "</string>
+    <string name="unloaded">"खली हो गयी "</string>
+    <string name="receiving_received">"रिसीविंग मिल गयी "</string>
+    <string name="free">"फ़्री "</string>
+    <string name="title_activity_login">"लोगिन करे "</string>
+    <string name="gate_in">गेट के अंदर</string>
+    <string name="unloading_started">अन्लोडिंग शुरू</string>
+    <string name="breakdown">टूट - फूट</string>
+</resources>

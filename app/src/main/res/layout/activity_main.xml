@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:weightSum="1"
+    tools:context="online.skylinelogistics.vaahan.MainActivity"
+    android:orientation="vertical"
+    android:background="#5fb0c9"
+    tools:layout_editor_absoluteY="25dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/previous_update"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:textColor="#fff"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/vehicle"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:textColor="#fff"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal" />
+
+    </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/StatusViewParent" >
+            <LinearLayout
+                android:id="@+id/StatusView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:orientation="vertical"
+                android:weightSum="1">
+            </LinearLayout>
+        </ScrollView>
+</LinearLayout>
