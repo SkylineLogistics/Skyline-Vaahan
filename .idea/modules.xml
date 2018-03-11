@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Vaahan.iml" filepath="$PROJECT_DIR$/Vaahan.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Skyline-Vaahan.iml" filepath="$PROJECT_DIR$/Skyline-Vaahan.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
