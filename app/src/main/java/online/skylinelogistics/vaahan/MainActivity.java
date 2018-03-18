@@ -389,6 +389,8 @@ public class MainActivity extends AppCompatActivity {
     private void sendStatus(final String status) {
 
         Toast.makeText(MainActivity.this,"Updating Status",Toast.LENGTH_LONG).show();
+        SharedPreferences preferences = getSharedPreferences(config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        final String supervisor = preferences.getString("ID","Not Available");
 
        latitude = 0; //mLastKnownLocation.getLatitude();
        longitude = 0; //mLastKnownLocation.getLongitude();
@@ -464,6 +466,7 @@ public class MainActivity extends AppCompatActivity {
                 params.put("vno",sharedPreferences.getString(config.VEHICLE_SHARED_PREF, "Not Available"));
                 params.put("latitude", String.valueOf(latitude));
                 params.put("longitude", String.valueOf(longitude));
+                params.put("supervisor",supervisor);
 
                 //returning parameter
                 return params;
