@@ -1,30 +1,28 @@
 package online.skylinelogistics.vaahan;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,12 +30,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,31 +53,17 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String step_last;
     private StringRequest stringRequest;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private LocationCallback mLocationCallback;
-    private Location mLastKnownLocation;
-    private LocationRequest mLocationRequest;
     private double latitude;
     private double longitude;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private boolean isReceiverRegistered;
     private String vno;
+    private String location_trip;
+    private TextView location_trip_view;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-        }
 
         DeviceID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
@@ -93,13 +76,26 @@ public class MainActivity extends AppCompatActivity {
         vehicle_view = (TextView) findViewById(R.id.vehicle);
         step_last_view = (TextView) findViewById(R.id.previous_update);
 
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // checking for type intent filter
+                if (intent.getAction().equals("registrationComplete")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+                    FirebaseMessaging.getInstance().subscribeToTopic("VaahanMessages");
+                    Toast.makeText(MainActivity.this,"Subscribed To Notification Server",Toast.LENGTH_SHORT).show();
+
+                } else if (intent.getAction().equals("pushNotification")) {
+
+                }
+            }
+        };
     }
 
     @Override
     protected void onPause() {
-
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-        isReceiverRegistered = false;
         super.onPause();
     }
 
@@ -107,22 +103,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter("registrationComplete"));
+
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter("pushNotification"));
+
+        NotificationUtils.clearNotifications(getApplicationContext());
+
         View svc;
         ViewGroup parent;
-
-        registerReceiver();
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-        }
 
         step_last = sharedPreferences.getString("step_last", "Not Available");
 
@@ -180,10 +172,11 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
         stage = sharedPreferences.getString("stage", "Not Available");
-
-
+        location_trip = sharedPreferences.getString("trip_location","No Trip Location Found");
         vehicle_view.setText("Vehicle No.: " + vno);
         step_last_view.setText("Last Step: " + step_last);
+        location_trip_view.setText(location_trip);
+
 
         switch (stage) {
             case "0":
@@ -387,6 +380,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendStatus(final String status) {
+        sendStatus(status, "");
+    }
+
+    private void sendStatus(final String status, final String location) {
 
         Toast.makeText(MainActivity.this,"Updating Status",Toast.LENGTH_LONG).show();
         SharedPreferences preferences = getSharedPreferences(config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -399,6 +396,8 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                        Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
 
                         //If we are getting success from server
                         JSONObject res = null;
@@ -467,6 +466,7 @@ public class MainActivity extends AppCompatActivity {
                 params.put("latitude", String.valueOf(latitude));
                 params.put("longitude", String.valueOf(longitude));
                 params.put("supervisor",supervisor);
+                params.put("location",location);
 
                 //returning parameter
                 return params;
@@ -504,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
                 (findViewById(R.id.breakdown_btn)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("breakdown");
+                        sendStatus("breakdown");;
                     }
                 });
                     (findViewById(R.id.stage_1_0)).setOnClickListener(new View.OnClickListener() {
@@ -630,15 +630,45 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void registerReceiver(){
-        if(!isReceiverRegistered) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                    new IntentFilter(config.REGISTRATION_COMPLETE));
-            isReceiverRegistered = true;
-        }
+    /*
+    private void send_update_with_location(final String status, String title)
+    {
+        new MaterialDialog.Builder(MainActivity.this)
+                .title(title)
+                .positiveText("Set")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input("Location", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        update_trip_field(status,dialog.getInputEditText().getText().toString());
+                        sendStatus(status,dialog.getInputEditText().getText().toString());
+                    }
+                })
+                .positiveColor(Color.RED)
+                .show();
     }
 
-    private void sendRegistrationToServer(final String refreshedToken) {
+    private void update_trip_field(String status, String location)
+    {
+        TextView location_field = (TextView) findViewById(R.id.trip_location);
+
+        SharedPreferences sp = getSharedPreferences(config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor edit = sp.edit();
+
+        if(status.equalsIgnoreCase("loading_advice"))
+        {
+            edit.putString("trip_location",location);
+            edit.commit();
+            location_field.setText(location);
+        }
     }
+    */
 
 }

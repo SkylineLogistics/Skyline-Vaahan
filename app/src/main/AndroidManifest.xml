@@ -4,8 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -25,30 +24,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".member_list" />
+        <activity android:name=".vehicle_list" />
 
-        <!-- [START instanceId_listener] -->
-        <service
-            android:name=".firebase.FirebaseServiceInstanceID"
-            android:exported="false">
+        <service android:name=".firebase.MessagingInstanceID">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <!-- [END instanceId_listener] -->
         <service
-            android:name=".firebase.FirebaseMessage"
-            android:exported="false">
+            android:name=".firebase.MessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <!-- [END gcm_listener] -->
-        <service
-            android:name=".firebase.RegistrationService"
-            android:exported="false" />
-
-        <activity android:name=".member_list" />
-        <activity android:name=".vehicle_list"></activity>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="SkylineVaahanChannelDefault"/>
     </application>
 
 </manifest>

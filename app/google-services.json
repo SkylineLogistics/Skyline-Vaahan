@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "907030524967",
-    "firebase_url": "https://vaahan-skyline.firebaseio.com",
-    "project_id": "vaahan-skyline",
-    "storage_bucket": "vaahan-skyline.appspot.com"
+    "project_number": "537273762113",
+    "firebase_url": "https://skylinevaahan-e54c9.firebaseio.com",
+    "project_id": "skylinevaahan-e54c9",
+    "storage_bucket": "skylinevaahan-e54c9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:907030524967:android:de1e3f514dbd4b8f",
+        "mobilesdk_app_id": "1:537273762113:android:de1e3f514dbd4b8f",
         "android_client_info": {
           "package_name": "online.skylinelogistics.vaahan"
         }
       },
       "oauth_client": [
         {
-          "client_id": "907030524967-ka0q1mjb00nfiprlkppmm8pq8l9j8nu0.apps.googleusercontent.com",
+          "client_id": "537273762113-rd7gc2erajvhgv37scnf0jp6586via5a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDODMy6g9Oy89h0at-QOtT04yTcdEGt4rY"
+          "current_key": "AIzaSyCT4nPrB5-S2gA9GTaTCQ3NU7zj9grKGro"
         }
       ],
       "services": {

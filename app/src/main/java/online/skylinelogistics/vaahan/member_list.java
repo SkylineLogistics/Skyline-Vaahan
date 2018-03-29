@@ -17,14 +17,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import online.skylinelogistics.vaahan.firebase.RegistrationService;
 
 public class member_list extends AppCompatActivity {
 
@@ -41,29 +41,6 @@ public class member_list extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.member_list);
-
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean(config.SENT_TOKEN_TO_SERVER, false);
-                if (sentToken) {
-
-
-                } else {
-
-                    String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-                    sendRegistrationToServer(refreshedToken);
-                }
-            }
-        };
-
-        registerReceiver();
-
-        Intent intent = new Intent(this, RegistrationService.class);
-        startService(intent);
 
         inflater = LayoutInflater.from(member_list.this);
         sharedPreferences = getSharedPreferences(config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -134,6 +111,28 @@ public class member_list extends AppCompatActivity {
                srl_ml.setRefreshing(false);
            }
        });
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // checking for type intent filter
+                if (intent.getAction().equals("registrationComplete")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+                    FirebaseMessaging.getInstance().subscribeToTopic("VaahanMessages");
+                    Toast.makeText(member_list.this,"Subscribed To Notification Server",Toast.LENGTH_SHORT).show();
+
+                } else if (intent.getAction().equals("pushNotification")) {
+
+                }
+            }
+        };
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
     }
 
     @Override
@@ -177,7 +176,16 @@ public class member_list extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        registerReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(" "));
+
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter("pushNotification"));
+
+        NotificationUtils.clearNotifications(getApplicationContext());
+
         LinearLayout sv = (LinearLayout) findViewById(R.id.MemberList);
 
         sv.removeAllViews();
@@ -221,17 +229,6 @@ public class member_list extends AppCompatActivity {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void sendRegistrationToServer(String refreshedToken) {
-    }
-
-    private void registerReceiver(){
-        if(!isReceiverRegistered) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                    new IntentFilter(config.REGISTRATION_COMPLETE));
-            isReceiverRegistered = true;
         }
     }
 

@@ -1,6 +1,7 @@
 package online.skylinelogistics.vaahan;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -76,6 +77,8 @@ public class LoginActivity extends Activity {
     }
 
     private void login(){
+
+        Toast.makeText(LoginActivity.this,"Loggin In",Toast.LENGTH_LONG).show();
         //Getting values from edit texts
         final String password = editTextPassword.getText().toString().trim();
         final String ID = editTextID.getText().toString().trim();
