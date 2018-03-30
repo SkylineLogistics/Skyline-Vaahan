@@ -4,8 +4,8 @@ public class config {
 
     //URLS
     public static final String LOGIN_URL = "https://api.skylinelogistics.online/vaahan/android/v1/login.php";
-    //public static final String STATUS_URL = "https://api.skylinelogistics.online/vaahan/android/v1/status.php";
-    public static final String STATUS_URL = "https://api.skylinelogistics.online/vaahan/android/v1/test_status.php";
+    public static final String STATUS_URL = "https://api.skylinelogistics.online/vaahan/android/v1/status.php";
+    //public static final String STATUS_URL = "https://api.skylinelogistics.online/vaahan/android/v1/test_status.php";
     public static final String VEHICLE_DETAIL = "https://api.skylinelogistics.online/vaahan/android/v1/vehicle_detail.php";
     public static final String VEHICLE_LIST = "https://api.skylinelogistics.online/vaahan/android/v1/vehicle_list.php";
 
