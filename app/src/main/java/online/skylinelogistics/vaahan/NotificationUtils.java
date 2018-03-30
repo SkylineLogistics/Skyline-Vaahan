@@ -104,7 +104,6 @@ public class NotificationUtils {
                 .setStyle(inboxStyle)
                 .setWhen(getTimeMilliSec(timeStamp))
                 .setSmallIcon(R.drawable.truck_notification)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
                 .setContentText(message)
                 .build();
 
@@ -126,7 +125,6 @@ public class NotificationUtils {
                 .setStyle(bigPictureStyle)
                 .setWhen(getTimeMilliSec(timeStamp))
                 .setSmallIcon(R.drawable.truck_notification)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
                 .setContentText(message)
                 .build();
 

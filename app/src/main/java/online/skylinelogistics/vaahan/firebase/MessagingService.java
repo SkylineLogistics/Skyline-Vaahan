@@ -74,6 +74,16 @@ public class MessagingService extends FirebaseMessagingService {
                 pushNotification.putExtra("message", message);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
+                Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+                resultIntent.putExtra("message", message);
+
+                if (TextUtils.isEmpty(imageUrl)) {
+                    showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
+                } else {
+                    // image is present, show notification with image
+                    showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
+                }
+
                 // play notification sound
                 NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
                 notificationUtils.playNotificationSound();
