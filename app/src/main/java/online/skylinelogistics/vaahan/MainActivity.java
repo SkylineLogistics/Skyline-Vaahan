@@ -1,5 +1,6 @@
 package online.skylinelogistics.vaahan;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -40,7 +41,7 @@ import org.w3c.dom.Text;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private TextView vehicle_view;
     private boolean loggedIn = false;
@@ -328,6 +329,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         sharedPreferences = getSharedPreferences(config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        loggedIn = sharedPreferences.getBoolean(config.LOGGEDIN_SHARED_PREF, false);
 
         String vno = sharedPreferences.getString(config.VEHICLE_SHARED_PREF, "Not Available");
         String step_last = sharedPreferences.getString(config.RESPONSE_PREVIOUS_STEP, "Not Available");

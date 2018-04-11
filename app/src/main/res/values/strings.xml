@@ -1,25 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Skyline Vaahan</string>
-
-    <string name="loading_advice">Loading Advice</string>
     <string name="factory_entry">Factory Entry</string>
+    <string name="breakdown">Breakdown</string>
+    <string name="loading_advice">Loading Advice</string>
     <string name="loaded">Loaded</string>
     <string name="paper_received">Paper Received</string>
     <string name="trip_start">Trip Start</string>
-    <string name="diesel_and_road_expense">Diesel And Road Expense</string>
+    <string name="title_activity_login">Login To Skyline</string>
+    <string name="check_in">Check In</string>
     <string name="destination_reached">Destination Reached</string>
-    <string name="unloading_point_entry">Unloading Point Entry</string>
+    <string name="gate_in">Gate In</string>
     <string name="sample">Sample</string>
-    <string name="sample_pass">Sample Pass</string>
-    <string name="sample_fail">Sample Fail</string>
+    <string name="sample_pass">Pass</string>
+    <string name="sample_fail">Fail</string>
+    <string name="unloading_started">Unloading Started</string>
     <string name="unloaded">Unloaded</string>
     <string name="receiving_received">Receiving Received</string>
     <string name="free">Free</string>
-
-    <string name="title_activity_login">Login To Skyline</string>
-    <string name="gate_in">Gate In</string>
-    <string name="unloading_started">Unloading Started</string>
-    <string name="breakdown">Breakdown</string>
-    <string name="check_in">Check In</string>
 
 </resources>

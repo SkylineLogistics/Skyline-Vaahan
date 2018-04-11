@@ -1,15 +1,13 @@
 package online.skylinelogistics.vaahan;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -19,7 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,10 +26,9 @@ import java.util.Map;
 
 public class LoginActivity extends Activity {
 
-    //Defining views
-    private EditText editTextPassword;
-    private EditText editTextID;
-    private Button buttonLogin;
+    private TextView editTextID;
+    private TextView editTextPassword;
+    private Button login_button;
 
     //boolean variable to check user is logged in or not
     //initially it is false
@@ -43,13 +39,11 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Initializing views
-        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        editTextID = (EditText) findViewById(R.id.editTextID);
+        editTextID = (TextView) findViewById(R.id.username);
+        editTextPassword = (TextView) findViewById(R.id.password);
+        login_button = (Button) findViewById(R.id.login_btn);
 
-        buttonLogin = (Button) findViewById(R.id.buttonLogin);
-
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+        login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
@@ -78,7 +72,8 @@ public class LoginActivity extends Activity {
 
     private void login(){
 
-        Toast.makeText(LoginActivity.this,"Loggin In",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Logging In",Toast.LENGTH_SHORT).show();
+
         //Getting values from edit texts
         final String password = editTextPassword.getText().toString().trim();
         final String ID = editTextID.getText().toString().trim();

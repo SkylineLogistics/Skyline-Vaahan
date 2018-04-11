@@ -1,5 +1,6 @@
 package online.skylinelogistics.vaahan;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +34,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class vehicle_list extends AppCompatActivity {
+public class vehicle_list extends Activity {
 
     private String member;
     private StringRequest stringRequest;

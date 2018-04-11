@@ -1,5 +1,6 @@
 package online.skylinelogistics.vaahan;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class member_list extends AppCompatActivity {
+public class member_list extends Activity {
 
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
