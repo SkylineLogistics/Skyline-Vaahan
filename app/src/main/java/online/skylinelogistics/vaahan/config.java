@@ -3,11 +3,16 @@ package online.skylinelogistics.vaahan;
 public class config {
 
     //URLS
-    public static final String LOGIN_URL = "https://api.skylinelogistics.online/vaahan/android/v1/login.php";
-    public static final String STATUS_URL = "https://api.skylinelogistics.online/vaahan/android/v1/status.php";
-    //public static final String STATUS_URL = "https://api.skylinelogistics.online/vaahan/android/v1/test_status.php";
-    public static final String VEHICLE_DETAIL = "https://api.skylinelogistics.online/vaahan/android/v1/vehicle_detail.php";
-    public static final String VEHICLE_LIST = "https://api.skylinelogistics.online/vaahan/android/v1/vehicle_list.php";
+    public static final String LOGIN_URL = "https://api.skylinelogistics.online/vaahan/android/login.php";
+    public static final String VEHICLE_DETAIL = "https://api.skylinelogistics.online/vaahan/android/vehicle_detail.php";
+    public static final String VEHICLE_LIST = "https://api.skylinelogistics.online/vaahan/android/vehicle_list.php";
+    public static final String UPDATE_CHECK = "https://api.skylinelogistics.online/vaahan/android/update_availability.php";
+    public static final String UPDATE_CONFIRM = "https://api.skylinelogistics.online/vaahan/android/update_confirm.php";
+    public static final String STATUS_URL = "https://api.skylinelogistics.online/vaahan/android/status.php";
+
+    //Test Urls
+    //public static final String STATUS_URL = "https://api.skylinelogistics.online/vaahan/android/test_status.php";
+    //public static final String UPDATE_CHECK = "https://api.skylinelogistics.online/vaahan/android/test_update_availability.php";
 
     //Keys for email and password as defined in our $_POST['key'] in login.php
     public static final String KEY_VNO = "vno";
@@ -15,6 +20,9 @@ public class config {
 
     //If server response is equal to this that means login is successful
     public static final String LOGIN_SUCCESS = "success";
+
+    //Server responses on Update check
+    public static final String UPDATE_AVAILABLE = "available";
 
     //Keys for Sharedpreferences
     //This would be the name of our shared preferences

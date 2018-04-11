@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
     private double latitude;
     private double longitude;
     private String vno;
-    private String location_trip;
     private TextView location_trip_view;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private Button check_in_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +72,13 @@ public class MainActivity extends AppCompatActivity {
 
         status_view = (LinearLayout) findViewById(R.id.StatusView);
 
+        check_in_button = (Button) findViewById(R.id.check_in_btn);
+
         Intent i = getIntent();
         vno = i.getStringExtra("vehicle_no");
         vehicle_view = (TextView) findViewById(R.id.vehicle);
         step_last_view = (TextView) findViewById(R.id.previous_update);
+        location_trip_view = (TextView) findViewById(R.id.trip_location);
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -120,11 +124,18 @@ public class MainActivity extends AppCompatActivity {
 
         DeviceID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
+        check_in_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendStatus("check_in");
+            }
+        });
+
         stringRequest = new StringRequest(Request.Method.POST, config.VEHICLE_DETAIL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //If we are getting success from server]
+                        //If we are getting success from server
                         try {
                             JSONObject res = new JSONObject(response);
                             String status = res.getString("status");
@@ -137,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putString(config.VEHICLE_SHARED_PREF, res.getString("vehicle_no"));
                                 editor.putString(config.TRIP_STAGE, res.getString("stage"));
                                 editor.putString(config.RESPONSE_PREVIOUS_STEP, res.getString("step_last"));
+                                editor.putString("trip_location",res.getString("trip_location"));
 
                                 //Saving values to editor
                                 editor.commit();
@@ -172,10 +184,8 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
         stage = sharedPreferences.getString("stage", "Not Available");
-        location_trip = sharedPreferences.getString("trip_location","No Trip Location Found");
         vehicle_view.setText("Vehicle No.: " + vno);
         step_last_view.setText("Last Step: " + step_last);
-        location_trip_view.setText(location_trip);
 
 
         switch (stage) {
@@ -188,13 +198,13 @@ public class MainActivity extends AppCompatActivity {
                 (findViewById(R.id.breakdown_btn)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("breakdown");
+                        send_update_with_location("breakdown","Breakdown Location");
                     }
                 });
                 (findViewById(R.id.stage_1_0)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("loading_advice");
+                        send_update_with_location("loading_advice","Trip Location");
                     }
                 });
                 (findViewById(R.id.stage_1_1)).setOnClickListener(new View.OnClickListener() {
@@ -234,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 (findViewById(R.id.breakdown_btn)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("breakdown");
+                        send_update_with_location("breakdown","Breakdown Location");
                     }
                 });
                 (findViewById(R.id.stage_2_0)).setOnClickListener(new View.OnClickListener() {
@@ -289,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                 (findViewById(R.id.breakdown_btn)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("breakdown");
+                        send_update_with_location("breakdown","Breakdown Location");
                     }
                 });
                 (findViewById(R.id.stage_3_0)).setOnClickListener(new View.OnClickListener() {
@@ -321,14 +331,6 @@ public class MainActivity extends AppCompatActivity {
 
         String vno = sharedPreferences.getString(config.VEHICLE_SHARED_PREF, "Not Available");
         String step_last = sharedPreferences.getString(config.RESPONSE_PREVIOUS_STEP, "Not Available");
-
-
-        //In onresume fetching value from sharedpreference
-        sharedPreferences = getSharedPreferences(config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-
-        //Fetching the boolean value form sharedpreferences
-        loggedIn = sharedPreferences.getBoolean(config.LOGGEDIN_SHARED_PREF, false);
-
         //If we will get true
         if (!loggedIn) {
             //We will start the Profile Activity
@@ -397,8 +399,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
-
                         //If we are getting success from server
                         JSONObject res = null;
                         try {
@@ -414,6 +414,7 @@ public class MainActivity extends AppCompatActivity {
                             //Adding values to editor
                             editor.putString(config.TRIP_STAGE, res.getString("stage"));
                             editor.putString(config.RESPONSE_PREVIOUS_STEP,res.getString("step_last"));
+                            editor.putString("trip_location",res.getString("trip_location"));
 
                             //Saving values to editor
                             editor.commit();
@@ -424,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
                         else{
                             //If the server response is not success
                             //Displaying an error message on toast
-                            Toast.makeText(MainActivity.this, "Can't Update Status, Logged In From Another Device", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Can't Update Status", Toast.LENGTH_LONG).show();
                             sharedPreferences = getSharedPreferences(config.SHARED_PREF_NAME,Context.MODE_PRIVATE);
                             //Getting editor
                             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -487,6 +488,8 @@ public class MainActivity extends AppCompatActivity {
 
         vehicle_view.setText("Vehicle No.: " + vno);
 
+        location_trip_view.setText(res.getString("trip_location"));
+
         stage = res.getString("stage");
 
         status_view = (LinearLayout) findViewById(R.id.StatusView);
@@ -504,13 +507,13 @@ public class MainActivity extends AppCompatActivity {
                 (findViewById(R.id.breakdown_btn)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("breakdown");;
+                        send_update_with_location("breakdown","Breakdown Location");
                     }
                 });
                     (findViewById(R.id.stage_1_0)).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sendStatus("loading_advice");
+                            send_update_with_location("loading_advice","Trip Location");
                         }
                     });
                     (findViewById(R.id.stage_1_1)).setOnClickListener(new View.OnClickListener() {
@@ -553,7 +556,7 @@ public class MainActivity extends AppCompatActivity {
                         (findViewById(R.id.breakdown_btn)).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                sendStatus("breakdown");
+                                send_update_with_location("breakdown","Breakdown Location");
                             }
                         });
                             (findViewById(R.id.stage_2_0)).setOnClickListener(new View.OnClickListener() {
@@ -611,7 +614,7 @@ public class MainActivity extends AppCompatActivity {
                         (findViewById(R.id.breakdown_btn)).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                sendStatus("breakdown");
+                                send_update_with_location("breakdown","Breakdown Location");
                             }
                         });
                             (findViewById(R.id.stage_3_0)).setOnClickListener(new View.OnClickListener() {
@@ -630,12 +633,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
     private void send_update_with_location(final String status, String title)
     {
         new MaterialDialog.Builder(MainActivity.this)
                 .title(title)
                 .positiveText("Set")
+                .negativeText("Cancel")
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .input("Location", "", new MaterialDialog.InputCallback() {
                     @Override
@@ -651,6 +654,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .positiveColor(Color.RED)
+                .negativeColor(Color.RED)
                 .show();
     }
 
@@ -669,6 +673,5 @@ public class MainActivity extends AppCompatActivity {
             location_field.setText(location);
         }
     }
-    */
 
 }

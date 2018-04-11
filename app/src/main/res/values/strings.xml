@@ -20,5 +20,6 @@
     <string name="gate_in">Gate In</string>
     <string name="unloading_started">Unloading Started</string>
     <string name="breakdown">Breakdown</string>
+    <string name="check_in">Check In</string>
 
 </resources>

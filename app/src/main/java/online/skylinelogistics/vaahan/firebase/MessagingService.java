@@ -62,10 +62,8 @@ public class MessagingService extends FirebaseMessagingService {
 
             String title = data.getString("title");
             String message = data.getString("message");
-            boolean isBackground = data.getBoolean("is_background");
             String imageUrl = data.getString("image");
             String timestamp = data.getString("timestamp");
-            JSONObject payload = data.getJSONObject("payload");
 
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
