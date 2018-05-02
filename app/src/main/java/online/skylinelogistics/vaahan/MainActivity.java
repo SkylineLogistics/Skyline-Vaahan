@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,6 +62,7 @@ public class MainActivity extends Activity {
     private TextView location_trip_view;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private Button check_in_button;
+    private TextView update_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,8 @@ public class MainActivity extends Activity {
         status_view = (LinearLayout) findViewById(R.id.StatusView);
 
         check_in_button = (Button) findViewById(R.id.check_in_btn);
+
+        update_time = (TextView) findViewById(R.id.update_time);
 
         Intent i = getIntent();
         vno = i.getStringExtra("vehicle_no");
@@ -137,6 +141,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         //If we are getting success from server
+                        Log.d("Response",response);
                         try {
                             JSONObject res = new JSONObject(response);
                             String status = res.getString("status");
@@ -149,10 +154,11 @@ public class MainActivity extends Activity {
                                 editor.putString(config.VEHICLE_SHARED_PREF, res.getString("vehicle_no"));
                                 editor.putString(config.TRIP_STAGE, res.getString("stage"));
                                 editor.putString(config.RESPONSE_PREVIOUS_STEP, res.getString("step_last"));
+                                editor.putString("last_updated_on",res.getString("last_checked"));
                                 editor.putString("trip_location",res.getString("trip_location"));
 
                                 //Saving values to editor
-                                editor.commit();
+                                editor.apply();
 
                                 update_views(res);
                             } else {
@@ -402,6 +408,8 @@ public class MainActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
 
+                        Log.d("Response",response);
+
                         //If we are getting success from server
                         JSONObject res = null;
                         try {
@@ -492,6 +500,8 @@ public class MainActivity extends Activity {
         vehicle_view.setText("Vehicle No.: " + vno);
 
         location_trip_view.setText(res.getString("trip_location"));
+
+        update_time.setText(res.getString("last_checked"));
 
         stage = res.getString("stage");
 
