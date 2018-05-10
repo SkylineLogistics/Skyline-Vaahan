@@ -132,7 +132,7 @@ public class MainActivity extends Activity {
         check_in_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendStatus("check_in");
+                send_update_with_location("check_in","Checking Location");
             }
         });
 
@@ -211,25 +211,25 @@ public class MainActivity extends Activity {
                 (findViewById(R.id.stage_1_0)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        send_update_with_location("loading_advice","Trip Location");
+                        send_update_with_location_and_description("loading_advice","Trip Location", "Enter Description");
                     }
                 });
                 (findViewById(R.id.stage_1_1)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("factory_entry");
+                        send_update_with_location("factory_entry","Factory Name");
                     }
                 });
                 (findViewById(R.id.stage_1_2)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("loaded");
+                        send_update_with_location("loaded","Weight");
                     }
                 });
                 (findViewById(R.id.stage_1_3)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("paper_received");
+                        send_update_with_location("paper_received","Bhada");
                     }
                 });
                 (findViewById(R.id.stage_1_4)).setOnClickListener(new View.OnClickListener() {
@@ -263,7 +263,7 @@ public class MainActivity extends Activity {
                 (findViewById(R.id.stage_2_1)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("gate_in");
+                        send_update_with_location("gate_in", "Description");
                     }
                 });
                 (findViewById(R.id.sample_pass)).setOnClickListener(new View.OnClickListener() {
@@ -281,13 +281,13 @@ public class MainActivity extends Activity {
                 (findViewById(R.id.stage_2_3)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("unloading_started");
+                        send_update_with_location("unloading_started", "Factory Name");
                     }
                 });
                 (findViewById(R.id.stage_2_4)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendStatus("unloaded");
+                        send_update_with_location("unloaded","Shortage");
                     }
                 });
                 (findViewById(R.id.sample)).setOnClickListener(new View.OnClickListener() {
@@ -391,10 +391,14 @@ public class MainActivity extends Activity {
     }
 
     private void sendStatus(final String status) {
-        sendStatus(status, "");
+        sendStatus(status, "","");
     }
 
     private void sendStatus(final String status, final String location) {
+        sendStatus(status, location,"");
+    }
+
+    private void sendStatus(final String status, final String location, final String description) {
 
         Toast.makeText(MainActivity.this,"Updating Status",Toast.LENGTH_LONG).show();
         SharedPreferences preferences = getSharedPreferences(config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -479,6 +483,7 @@ public class MainActivity extends Activity {
                 params.put("longitude", String.valueOf(longitude));
                 params.put("supervisor",supervisor);
                 params.put("location",location);
+                params.put("description",description);
 
                 //returning parameter
                 return params;
@@ -494,6 +499,7 @@ public class MainActivity extends Activity {
 
         View svc;
         ViewGroup parent;
+
 
         step_last_view.setText("Last Step: "+res.getString("step_last"));
 
@@ -526,25 +532,25 @@ public class MainActivity extends Activity {
                     (findViewById(R.id.stage_1_0)).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            send_update_with_location("loading_advice","Trip Location");
+                            send_update_with_location_and_description("loading_advice","Trip Location", "Enter Description");
                         }
                     });
                     (findViewById(R.id.stage_1_1)).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sendStatus("factory_entry");
+                            send_update_with_location("factory_entry","Factory Name");
                         }
                     });
                     (findViewById(R.id.stage_1_2)).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sendStatus("loaded");
+                            send_update_with_location("loaded", "Weight");
                         }
                     });
                     (findViewById(R.id.stage_1_3)).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sendStatus("paper_received");
+                            send_update_with_location("paper_received", "Bhada");
                         }
                     });
                     (findViewById(R.id.stage_1_4)).setOnClickListener(new View.OnClickListener() {
@@ -581,7 +587,7 @@ public class MainActivity extends Activity {
                             (findViewById(R.id.stage_2_1)).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    sendStatus("gate_in");
+                                    send_update_with_location("gate_in","Description");
                                 }
                             });
                             (findViewById(R.id.sample_pass)).setOnClickListener(new View.OnClickListener() {
@@ -599,13 +605,13 @@ public class MainActivity extends Activity {
                             (findViewById(R.id.stage_2_3)).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    sendStatus("unloading_started");
+                                    send_update_with_location("unloading_started","Factory Name");
                                 }
                             });
                             (findViewById(R.id.stage_2_4)).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    sendStatus("unloaded");
+                                    send_update_with_location("unloaded", "Shortage");
                                 }
                             });
                             (findViewById(R.id.sample)).setOnClickListener(new View.OnClickListener() {
@@ -653,7 +659,7 @@ public class MainActivity extends Activity {
                 .positiveText("Set")
                 .negativeText("Cancel")
                 .inputType(InputType.TYPE_CLASS_TEXT)
-                .input("Location", "", new MaterialDialog.InputCallback() {
+                .input(title, "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
@@ -664,6 +670,55 @@ public class MainActivity extends Activity {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         update_trip_field(status,dialog.getInputEditText().getText().toString());
                         sendStatus(status,dialog.getInputEditText().getText().toString());
+                    }
+                })
+                .positiveColor(Color.RED)
+                .negativeColor(Color.RED)
+                .show();
+    }
+
+    private void send_update_with_location_and_description(final String status, final String location_title, final String description_title)
+    {
+        new MaterialDialog.Builder(MainActivity.this)
+                .title(location_title)
+                .positiveText("Set")
+                .negativeText("Cancel")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(location_title, "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        update_trip_field(status,dialog.getInputEditText().getText().toString());
+                        ask_description(status, description_title,dialog.getInputEditText().getText().toString());
+                    }
+                })
+                .positiveColor(Color.RED)
+                .negativeColor(Color.RED)
+                .show();
+    }
+
+    private void ask_description(final String status, final String description_title, final String location_value)
+    {
+        new MaterialDialog.Builder(MainActivity.this)
+                .title(description_title)
+                .positiveText("Set")
+                .negativeText("Cancel")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(description_title, "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        sendStatus(status,location_value,dialog.getInputEditText().getText().toString());
                     }
                 })
                 .positiveColor(Color.RED)
@@ -682,9 +737,17 @@ public class MainActivity extends Activity {
         if(status.equalsIgnoreCase("loading_advice"))
         {
             edit.putString("trip_location",location);
-            edit.commit();
+            edit.apply();
             location_field.setText(location);
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        String member = sharedPreferences.getString("member_name","Not Available");
+        Intent i = new Intent(this, vehicle_list.class);
+        i.putExtra("member",member);
+        startActivity(i);
+        finish();
+    }
 }

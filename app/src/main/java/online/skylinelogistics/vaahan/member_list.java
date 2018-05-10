@@ -37,6 +37,7 @@ public class member_list extends Activity {
     private boolean isReceiverRegistered;
     private SharedPreferences sharedPreferences;
     private SwipeRefreshLayout srl_ml;
+    private SharedPreferences.Editor edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class member_list extends Activity {
 
         inflater = LayoutInflater.from(member_list.this);
         sharedPreferences = getSharedPreferences(config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        edit = sharedPreferences.edit();
 
        Intent i = getIntent();
        self = i.getBooleanExtra("self",false);
@@ -235,6 +237,9 @@ public class member_list extends Activity {
 
     private void view_vehicle(String member)
     {
+        edit.putString("member_name",member);
+        edit.apply();
+
         Intent i = new Intent(this, vehicle_list.class);
         i.putExtra("member",member);
         startActivity(i);

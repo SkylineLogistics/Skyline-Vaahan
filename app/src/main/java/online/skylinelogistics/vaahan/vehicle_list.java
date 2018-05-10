@@ -247,4 +247,11 @@ public class vehicle_list extends Activity {
         Intent intent = new Intent(vehicle_list.this, LoginActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(this, member_list.class);
+        startActivity(i);
+        finish();
+    }
 }

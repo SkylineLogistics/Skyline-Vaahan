@@ -8,7 +8,7 @@
     <string name="paper_received">Paper Received</string>
     <string name="trip_start">Trip Start</string>
     <string name="title_activity_login">Login To Skyline</string>
-    <string name="check_in">Check In</string>
+    <string name="check_in">Check Vehicle</string>
     <string name="destination_reached">Destination Reached</string>
     <string name="gate_in">Gate In</string>
     <string name="sample">Sample</string>
